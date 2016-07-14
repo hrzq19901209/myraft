@@ -1,0 +1,66 @@
+package protobuf;
+
+message LogEntry {
+    required uint64 Index=1;
+    required uint64 Term=2;
+    required string CommandName=3;
+    optional bytes Command=4;
+}
+
+message AppendEntriesRequest {
+    required uint64 Term=1;
+    required uint64 PrevLogIndex=2;
+    required uint64 PrevLogTerm=3;
+    required uint64 CommitIndex=4;
+    required string LeaderName=5;
+    repeated LogEntry Entries=6;
+}
+
+message AppendEntriesResponse {
+    required uint64 Term=1;
+    required uint64 Index=2;
+    required uint64 CommitIndex=3;
+    required bool   Success=4;
+}
+
+message RequestVoteRequest {
+    required uint64 Term=1;
+    required uint64 LastLogIndex=2;
+    required uint64 LastLogTerm=3;
+    required string CandidateName=4;
+}
+
+message RequestVoteResponse {
+    required uint64 Term=1;
+    required bool VoteGranted=2;
+}
+
+message SnapshotRecoveryRequest {
+    required string  LeaderName=1;
+    required uint64  LastIndex=2;
+    required uint64  LastTerm=3;   
+
+    message Peer {
+        required string Name=1;
+        required string ConnectionString=2;
+    }  
+    repeated Peer  Peers=4;  
+
+    required bytes   State=5;
+}
+
+message SnapshotRecoveryResponse {
+    required uint64 Term=1;     
+    required bool Success=2;
+    required uint64 CommitIndex=3;
+}
+
+message SnapshotRequest {
+    required string LeaderName=1;
+    required uint64 LastIndex=2; 
+    required uint64 LastTerm=3;
+}
+
+message SnapshotResponse {
+    required bool Success=1;
+}
